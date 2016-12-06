@@ -28,7 +28,7 @@ import net.corda.node.services.api.CheckpointStorage
 import net.corda.node.services.api.ServiceHubInternal
 import net.corda.node.utilities.AddOrRemove
 import net.corda.node.utilities.AffinityExecutor
-import net.corda.node.utilities.afterCommit
+import net.corda.node.utilities.afterDatabaseCommit
 import net.corda.node.utilities.isolatedTransaction
 import org.apache.activemq.artemis.utils.ReusableLatch
 import org.jetbrains.exposed.sql.Database
@@ -137,7 +137,7 @@ class StateMachineManager(val serviceHub: ServiceHubInternal,
      * An observable that emits triples of the changing flow, the type of change, and a process-specific ID number
      * which may change across restarts.
      */
-    val changes: Observable<Change> = mutex.content.changesPublisher.afterCommit()
+    val changes: Observable<Change> = mutex.content.changesPublisher.afterDatabaseCommit()
 
     init {
         Fiber.setDefaultUncaughtExceptionHandler { fiber, throwable ->

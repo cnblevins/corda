@@ -28,7 +28,7 @@ import net.corda.node.services.network.NetworkMapService.Companion.SUBSCRIPTION_
 import net.corda.node.services.network.NetworkMapService.FetchMapResponse
 import net.corda.node.services.network.NetworkMapService.SubscribeResponse
 import net.corda.node.utilities.AddOrRemove
-import net.corda.node.utilities.afterCommit
+import net.corda.node.utilities.afterDatabaseCommit
 import rx.Observable
 import rx.subjects.PublishSubject
 import java.security.SignatureException
@@ -51,7 +51,7 @@ open class InMemoryNetworkMapCache : SingletonSerializeAsToken(), NetworkMapCach
     override val partyNodes: List<NodeInfo>
         get() = registeredNodes.map { it.value }
     private val _changed = PublishSubject.create<MapChange>()
-    override val changed: Observable<MapChange> = _changed.afterCommit()
+    override val changed: Observable<MapChange> = _changed.afterDatabaseCommit()
     private val _registrationFuture = SettableFuture.create<Unit>()
     override val mapServiceRegistered: ListenableFuture<Unit>
         get() = _registrationFuture

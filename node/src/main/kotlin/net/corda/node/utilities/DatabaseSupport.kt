@@ -159,15 +159,20 @@ class StrandLocalTransactionManager(initWithDatabase: Database) : TransactionMan
 }
 
 /**
- * Buffer observations until after the current database transaction has been committed.
+ * Buffer observations until after the current or next database transaction has been committed.  Observations are never
+ * dropped, simply delayed.
  *
- * Those outside the node should be notified after any [Flow] has checkpointed and the associated database transaction
+ * Primarily for use by component authors to offer [Observable]s without race conditions vs. the database.
+ *
+ * Detail: Those outside the node should be notified after any [Flow] has checkpointed and the associated database transaction
  * has been committed so that changes are externally visible.  To do so for any [Observable], use this extension function.
  * Otherwise the state associated with the observation might not yet have changed (been committed) to reflect it.
  * If within the node, then it's okay to execute immediately within the same database transaction and therefore this
  * extension function should not be used.
+ *
+ * For examples, see the call hierarchy of this function.
  */
-fun <T : Any> Observable<T>.afterCommit(): Observable<T> {
+fun <T : Any> Observable<T>.afterDatabaseCommit(): Observable<T> {
     val databaseTxBoundaries: Observable<StrandLocalTransactionManager.Boundary> = StrandLocalTransactionManager.transactionBoundaries
     return this.buffer(databaseTxBoundaries).concatMap { Observable.from(it) }
 }

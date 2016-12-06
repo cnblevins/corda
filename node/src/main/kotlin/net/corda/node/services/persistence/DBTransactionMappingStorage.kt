@@ -45,7 +45,7 @@ class DBTransactionMappingStorage : StateMachineRecordedTransactionMappingStorag
     private val mutex = ThreadBox(object {
         val stateMachineTransactionMap = TransactionMappingsMap()
         val updates = PublishSubject.create<StateMachineTransactionMapping>()
-        val updatesAfterCommit = updates.afterCommit()
+        val updatesAfterCommit = updates.afterDatabaseCommit()
     })
 
     override fun addMapping(stateMachineRunId: StateMachineRunId, transactionId: SecureHash) {

@@ -80,7 +80,7 @@ class NodeVaultService(private val services: ServiceHub) : SingletonSerializeAsT
         }
 
         val _updatesPublisher = PublishSubject.create<Vault.Update>()
-        val _updatesAfterCommit = _updatesPublisher.afterCommit()
+        val _updatesAfterCommit = _updatesPublisher.afterDatabaseCommit()
 
         fun allUnconsumedStates(): Iterable<StateAndRef<ContractState>> {
             // Order by txhash for if and when transaction storage has some caching.

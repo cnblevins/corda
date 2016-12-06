@@ -16,7 +16,7 @@ class ObservablesTests {
 
         val subject = PublishSubject.create<Unit>()
         val undelayedObservable: Observable<Unit> = subject
-        val delayedObservable: Observable<Unit> = subject.afterCommit()
+        val delayedObservable: Observable<Unit> = subject.afterDatabaseCommit()
 
         val delayedEventSeqNo = SettableFuture.create<Pair<Int, Boolean>>()
         val undelayedEventSeqNo = SettableFuture.create<Pair<Int, Boolean>>()
