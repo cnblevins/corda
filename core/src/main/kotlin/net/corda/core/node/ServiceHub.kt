@@ -51,7 +51,6 @@ interface ServiceHub {
      *
      * @throws TransactionResolutionException if the [StateRef] points to a non-existent transaction.
      */
-
     fun <T : ContractState> toStateAndRef(ref: StateRef): StateAndRef<T> {
         val definingTx =  storageService.validatedTransactions.getTransaction(ref.txhash) ?: throw TransactionResolutionException(ref.txhash)
         return definingTx.tx.outRef<T>(ref.index)
