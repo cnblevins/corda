@@ -159,8 +159,9 @@ class StrandLocalTransactionManager(initWithDatabase: Database) : TransactionMan
 }
 
 /**
- * Buffer observations until after the current or next database transaction has been committed.  Observations are never
- * dropped, simply delayed.
+ * Buffer observations until after the current or next database transaction has been closed.  Observations are never
+ * dropped, simply delayed.  They will be stuck forever if there is no subsequent database transaction close, however.
+ * In practice the current uses are always followed by a transaction commit & close.
  *
  * Primarily for use by component authors to offer [Observable]s without race conditions vs. the database.
  *
