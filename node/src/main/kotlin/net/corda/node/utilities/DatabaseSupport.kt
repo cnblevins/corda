@@ -72,7 +72,7 @@ fun <T> isolatedTransaction(database: Database, block: Transaction.() -> T): T {
  * explicitly just prior to initiating a transaction in [databaseTransaction] and [createDatabaseTransaction] above.
  *
  * The [StrandLocalTransactionManager] instances have an [Observable] of the transaction close [Boundary]s which
- * facilitates the use of [Observable.afterCommit] to create event streams that only emit once the database
+ * facilitates the use of [Observable.afterDatabaseCommit] to create event streams that only emit once the database
  * transaction is closed and the data has been persisted and becomes visible to other observers.
  */
 class StrandLocalTransactionManager(initWithDatabase: Database) : TransactionManager {
